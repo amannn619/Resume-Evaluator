@@ -7,16 +7,19 @@ interface JDInputProps {
 export default function JobDescriptionInput({ value, error, onTextChange }: JDInputProps) {
 
     return (
-        <div style={{ display: 'flex', flexDirection: 'column' }}>
-            <label style={{ marginBottom: '8px', fontWeight: 'bold' }}>Job Description</label>
+        <div className="flex flex-col">
+            <label className="mb-2 font-bold text-main">Job Description</label>
             <textarea
                 placeholder="Paste at least 50 characters..."
                 rows={6}
                 value={value}
                 onChange={(e) => onTextChange(e.target.value)}
-                style={{ borderColor: error ? 'red' : '#ccc', padding: '8px' }}
+                className={`w-full p-3 border rounded-lg bg-surface text-main resize-y focus:outline-none focus:ring-2 transition-shadow ${error
+                    ? 'border-error focus:ring-error/50'
+                    : 'border-outline focus:ring-brand/50'
+                    }`}
             />
-            {error && <span style={{ color: 'red', fontSize: '14px', marginTop: '4px' }}>{error}</span>}
+            {error && <span className="text-error text-sm mt-1">{error}</span>}
         </div>
     )
 }

@@ -35,9 +35,9 @@ export default function Home() {
 
     return (
         <div>
-            <h1>AI Resume Evaluator</h1>
+            <h1 className="text-3xl font-bold mb-8 text-main">AI Resume Evaluator</h1>
             <p>Compare your resume against a job description.</p>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '600px' }}>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-w-2xl">
 
                 <JobDescriptionInput
                     value={jobDescription}
@@ -49,7 +49,7 @@ export default function Home() {
 
                 <button
                     type="submit"
-                    style={{ display: "block", marginTop: "10px" }}
+                    className="px-6 py-3 mt-2 font-semibold rounded-lg bg-brand text-white transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={!jobDescription || !resumeFile}
                 >
                     Evaluate Resume

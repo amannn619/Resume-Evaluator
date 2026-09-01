@@ -1,16 +1,24 @@
-import { Link, Outlet } from "react-router-dom";
+import { NavLink, Outlet } from "react-router-dom";
 
 export default function AppLayout() {
+    const getNavClass = (isActive: boolean, isSecondary = false) => {
+        const baseClasses = "hover:text-brand font-semibold transition-colors";
+
+        if (isSecondary) {
+            return `${baseClasses} ${isActive ? 'text-main font-bold' : 'text-subtle'}`;
+        }
+        return `${baseClasses} ${isActive ? 'text-brand' : 'text-main'}`;
+    };
     return (
         <>
-            <nav style={{ padding: '1rem', background: '#eee', display: 'flex', gap: '1rem' }}>
-                <Link to="/">Home</Link>
-                <Link to="/dashboard">Dashboard</Link>
-                <Link to="/login">Login</Link>
-                <Link to="/register">Register</Link>
+            <nav className="flex gap-6 p-4 bg-surface border-b border-outline">
+                <NavLink to="/" className={({ isActive }) => getNavClass(isActive)}>Home</NavLink>
+                <NavLink to="/dashboard" className={({ isActive }) => getNavClass(isActive)}>Dashboard</NavLink>
+                <NavLink to="/login" className={({ isActive }) => getNavClass(isActive)}>Login</NavLink>
+                <NavLink to="/register" className={({ isActive }) => getNavClass(isActive)}>Register</NavLink>
             </nav>
 
-            <main style={{ padding: '2rem' }}>
+            <main className="p-8 max-w-5xl mx-auto">
                 <Outlet />
             </main>
         </>
