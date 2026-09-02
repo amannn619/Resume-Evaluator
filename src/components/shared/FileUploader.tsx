@@ -26,13 +26,17 @@ export default function FileUploader({ accept, maxSizeMB, onFileSelect }: FileUp
     };
 
     return (
-        <div style={{ padding: '1rem', border: '1px dashed #ccc', borderRadius: '8px' }}>
-            <label style={{ display: 'block', marginBottom: '8px', fontWeight: 'bold' }}>
+        <div className="p-6 border-2 border-dashed border-outline rounded-lg bg-surface text-main">
+            <label className="block mb-2 font-bold">
                 Upload Resume
             </label>
-            <input type="file" accept={accept} onChange={handleFileSelect} />
+            <input
+                type="file"
+                accept={accept}
+                onChange={handleFileSelect}
+                className="block w-full text-sm text-subtle file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-brand file:text-white hover:file:opacity-90 cursor-pointer transition-colors" />
 
-            {error && <p style={{ color: 'red', margin: '8px 0 0' }}>{error}</p>}
+            {error && <p className="text-error mt-2 text-sm">{error}</p>}
         </div>
     )
 }

@@ -1,19 +1,25 @@
 import { useState } from "react";
 import JobDescriptionInput from "@features/home/JobDescriptionInput";
 import FileUploader from "@/components/shared/FileUploader";
+import { resumeApi } from "@/api/client";
 
 export default function Home() {
     const [jobDescription, setJobDescription] = useState<string>("");
     const [resumeFile, setResumeFile] = useState<File>(null);
     const [jdError, setJdError] = useState("");
 
-    const handleSubmit = (e: React.SubmitEvent) => {
+    const [isLoading, setIsLoading] = useState(false);
+    const [apiResponse, setApiResponse] = useState(null);
+    const [apiError, setApiError] = useState("");
+
+    const handleSubmit = async (e: React.SubmitEvent) => {
         e.preventDefault();
         setJdError("");
+        setApiError("");
+        setApiResponse(null);
 
         if (jobDescription.length < 50) {
             setJdError("Job description must be at least 50 characters.");
-            console.log("Job description must be at least 50 characters.")
             return;
         }
         if (!resumeFile) {
@@ -29,15 +35,26 @@ export default function Home() {
         formData.forEach((value, key) => {
             console.log(`${key} => `, value);
         })
+        setIsLoading(true);
 
-        alert('Validation passed! Ready for Day 6 Data Fetching.');
+        try {
+            const result = await resumeApi.evaluate(formData);
+            setApiResponse(result.data);
+        }
+        catch (err) {
+            console.log(err);
+            setApiError("Failed to analyze resume. Please try again.");
+        }
+        finally {
+            setIsLoading(false);
+        }
     };
 
     return (
         <div>
-            <h1>AI Resume Evaluator</h1>
+            <h1 className="text-3xl font-bold mb-8 text-main">AI Resume Evaluator</h1>
             <p>Compare your resume against a job description.</p>
-            <form onSubmit={handleSubmit} style={{ display: 'flex', flexDirection: 'column', gap: '2rem', maxWidth: '600px' }}>
+            <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-w-2xl">
 
                 <JobDescriptionInput
                     value={jobDescription}
@@ -47,12 +64,27 @@ export default function Home() {
 
                 <FileUploader accept=".pdf" maxSizeMB={1} onFileSelect={setResumeFile} />
 
+                {apiError && (
+                    <div className="p-4 bg-error/10 border border-error rounded-lg text-error">
+                        {apiError}
+                    </div>
+                )}
+                {apiResponse && (
+                    <div className="p-4 bg-success/10 border border-success rounded-lg text-success">
+                        Evaluation Complete! Score: {apiResponse.score}/100
+                    </div>
+                )}
+
                 <button
                     type="submit"
-                    style={{ display: "block", marginTop: "10px" }}
-                    disabled={!jobDescription || !resumeFile}
+                    className="px-6 py-3 mt-2 font-semibold rounded-lg bg-brand text-white transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
+                    disabled={!jobDescription || !resumeFile || isLoading}
                 >
-                    Evaluate Resume
+                    {isLoading ? (
+                        <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                    ) : (
+                        'Evaluate Now'
+                    )}
                 </button>
             </form>
         </div>
