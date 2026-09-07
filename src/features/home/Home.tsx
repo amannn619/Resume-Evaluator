@@ -2,6 +2,8 @@ import { useState } from "react";
 import JobDescriptionInput from "@features/home/JobDescriptionInput";
 import FileUploader from "@/components/shared/FileUploader";
 import { resumeApi } from "@/api/client";
+import ScoreCard from "@/components/shared/ScoreCard";
+import SuggestionList from "@/components/shared/SuggestionList";
 
 export default function Home() {
     const [jobDescription, setJobDescription] = useState<string>("");
@@ -38,8 +40,8 @@ export default function Home() {
         setIsLoading(true);
 
         try {
-            const result = await resumeApi.evaluate(formData);
-            setApiResponse(result.data);
+            const result = await resumeApi.mockEvaluate(formData);
+            setApiResponse(result);
         }
         catch (err) {
             console.log(err);
@@ -70,9 +72,9 @@ export default function Home() {
                     </div>
                 )}
                 {apiResponse && (
-                    <div className="p-4 bg-success/10 border border-success rounded-lg text-success">
-                        Evaluation Complete! Score: {apiResponse.score}/100
-                    </div>
+                    <ScoreCard score={apiResponse.score}>
+                        <SuggestionList suggestions={apiResponse.suggestions} />
+                    </ScoreCard>
                 )}
 
                 <button
