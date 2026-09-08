@@ -1,7 +1,11 @@
+import { authApi } from "@/api/client";
 import { useAuthStore } from "@/store/authStore";
+import { useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 
 export default function AppLayout() {
+    const [error, setError] = useState('');
+    const [isLoading, setIsLoading] = useState(false);
     const getNavClass = (isActive: boolean, isSecondary = false) => {
         const baseClasses = "hover:text-brand font-semibold transition-colors";
 
@@ -11,33 +15,49 @@ export default function AppLayout() {
         return `${baseClasses} ${isActive ? 'text-brand' : 'text-main'}`;
     };
 
-    const user = useAuthStore((state) => state.user);
-    const loginMock = useAuthStore((state) => state.loginMock);
-    const logout = useAuthStore((state) => state.logout);
+    const user = useAuthStore(state => state.user);
+    const clearAuth = useAuthStore(state => state.clearAuth);
+    async function handleLogout() {
+        console.log("logout clicked")
+        setError('');
+        setIsLoading(true);
+
+        try {
+            const response = await authApi.logout();
+            console.log(response)
+        }
+        catch (err) {
+            console.log(err)
+            // setError(err.response.data.message)
+        }
+        finally {
+            clearAuth();
+            setIsLoading(false);
+        }
+    }
 
     return (
         <>
             <nav className="flex gap-6 p-4 bg-surface border-b border-outline">
                 <NavLink to="/" className={({ isActive }) => getNavClass(isActive)}>Home</NavLink>
                 <NavLink to="/dashboard" className={({ isActive }) => getNavClass(isActive)}>Dashboard</NavLink>
+
                 {
                     user ? (
                         <>
-                            <button onClick={logout} className="text-error font-semibold hover:opacity-80 transition-opacity cursor-pointer">
+                            <button onClick={handleLogout} disabled={isLoading} className="text-error font-semibold hover:opacity-80">
                                 Logout
                             </button>
-                            <span className="text-subtle text-sm">Welcome, {user.name}</span>
-                        </>
-
-                    ) : (
-                        <>
-                            <NavLink to="/login" className={({ isActive }) => getNavClass(isActive)}>Login</NavLink>
-                            <NavLink to="/register" className={({ isActive }) => getNavClass(isActive)}>Register</NavLink>
-                            <button onClick={loginMock} className="text-success font-semibold hover:opacity-80 transition-opacity cursor-pointer">
-                                Mock Login
-                            </button>
+                            <span className="text-subtle text-sm">Welcome, {user.username}</span>
                         </>
                     )
+                        : (
+                            <>
+                                <NavLink to="/login" className={({ isActive }) => getNavClass(isActive)}>Login</NavLink>
+                                <NavLink to="/register" className={({ isActive }) => getNavClass(isActive)}>Register</NavLink>
+                            </>
+
+                        )
                 }
 
             </nav>

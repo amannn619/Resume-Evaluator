@@ -1,26 +1,26 @@
 import { create } from "zustand";
 
+interface User {
+    id: string;
+    username: string;
+}
+
 interface AuthState {
-    user: { name: string, email: string } | null,
+    user: User | null,
     accessToken: string | null,
-    loginMock: () => void,
-    logout: () => void,
+    setAuth: (user: User, token: string) => void,
+    clearAuth: () => void,
 }
 
 export const useAuthStore = create<AuthState>((set) => ({
 
     user: null,
     accessToken: null,
-    loginMock: () => {
-        set({
-            user: { name: "Aman Yadav", email: "aman@gamil.com" },
-            accessToken: "mock-jwt-token-123"
-        })
+
+    setAuth: (user: User, token) => {
+        console.log(user, token)
+        set({ user: user, accessToken: token })
+
     },
-    logout: () => {
-        set({
-            user: null,
-            accessToken: null
-        })
-    }
+    clearAuth: () => set({ user: null, accessToken: null })
 }));
