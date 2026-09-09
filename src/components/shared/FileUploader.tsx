@@ -3,11 +3,11 @@ import { useState } from "react";
 
 interface FileUploaderInputProps {
     accept: string;
-    maxSizeMB: number;
     onFileSelect: (file: File | null) => void
+    maxSizeMB?: number;
 }
 
-export default function FileUploader({ accept, maxSizeMB, onFileSelect }: FileUploaderInputProps) {
+export default function FileUploader({ accept, onFileSelect, maxSizeMB = 2 }: FileUploaderInputProps) {
     const [error, setError] = useState("");
     const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
         setError("");

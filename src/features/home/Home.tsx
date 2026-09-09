@@ -31,7 +31,7 @@ export default function Home() {
 
         const formData = new FormData();
         formData.append('resume', resumeFile);
-        formData.append('jdText', jobDescription);
+        formData.append('description', jobDescription);
 
         console.log('Sending FormData to API...');
         formData.forEach((value, key) => {
@@ -40,8 +40,8 @@ export default function Home() {
         setIsLoading(true);
 
         try {
-            const result = await resumeApi.mockEvaluate(formData);
-            setApiResponse(result);
+            const result = await resumeApi.evaluate(formData);
+            setApiResponse(result.data);
         }
         catch (err) {
             console.log(err);
@@ -73,7 +73,7 @@ export default function Home() {
                 )}
                 {apiResponse && (
                     <ScoreCard score={apiResponse.score}>
-                        <SuggestionList suggestions={apiResponse.suggestions} />
+                        <SuggestionList suggestions={apiResponse.improvements} />
                     </ScoreCard>
                 )}
 
