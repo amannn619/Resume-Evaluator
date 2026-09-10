@@ -1,7 +1,7 @@
 import { authApi } from "@/api/client";
 import { useAuthStore } from "@/store/authStore";
 import { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
     const [error, setError] = useState('');
@@ -19,7 +19,7 @@ export default function Login() {
         try {
             const response = await authApi.login({ username, password });
             setAuth(response.data.user, response.data.accessToken);
-            navigate('/dashboard')
+            navigate('/')
         }
         catch (err) {
             console.log(err.response)
@@ -62,6 +62,13 @@ export default function Login() {
                     {isLoading ? "Logging in" : "Login"}
                 </button>
             </form>
+
+            <div className="mt-6 text-center text-sm text-subtle">
+                Don't have an account?{' '}
+                <Link to="/register" className="text-brand font-semibold hover:underline transition-all">
+                    Register here
+                </Link>
+            </div>
         </div>
     )
 }

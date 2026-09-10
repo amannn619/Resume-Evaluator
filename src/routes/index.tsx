@@ -5,7 +5,7 @@ import Home from '@/features/home/Home';
 import Login from '@/features/auth/Login';
 import Register from '@/features/auth/Register';
 
-const LazyDashboard = lazy(() => import('@features/dashboard/Dashboard'));
+// const LazyDashboard = lazy(() => import('@features/dashboard/Dashboard'));
 
 export const router = createBrowserRouter([
     {
@@ -24,14 +24,14 @@ export const router = createBrowserRouter([
                 path: '/register',
                 element: <Register />
             },
-            {
-                path: '/dashboard',
-                element: (
-                    <Suspense fallback={<div>Loading Dashboard...</div>}>
-                        <LazyDashboard />
-                    </Suspense>
-                )
-            }
+            // {
+            //     path: '/dashboard',
+            //     element: (
+            //         <Suspense fallback={<div>Loading Dashboard...</div>}>
+            //             <LazyDashboard />
+            //         </Suspense>
+            //     )
+            // }
         ]
     }
 ])

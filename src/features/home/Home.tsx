@@ -34,9 +34,6 @@ export default function Home() {
         formData.append('description', jobDescription);
 
         console.log('Sending FormData to API...');
-        formData.forEach((value, key) => {
-            console.log(`${key} => `, value);
-        })
         setIsLoading(true);
 
         try {

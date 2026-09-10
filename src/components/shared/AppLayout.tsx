@@ -1,70 +1,85 @@
-import { authApi } from "@/api/client";
 import { useAuthStore } from "@/store/authStore";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
+import logoIcon from "../../assets/logo.svg";
 
 export default function AppLayout() {
-    const [error, setError] = useState('');
-    const [isLoading, setIsLoading] = useState(false);
-    const getNavClass = (isActive: boolean, isSecondary = false) => {
-        const baseClasses = "hover:text-brand font-semibold transition-colors";
+    const user = useAuthStore((state) => state.user);
+    const [isDark, setIsDark] = useState(() => {
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            return savedTheme === "dark";
+        }
 
-        if (isSecondary) {
-            return `${baseClasses} ${isActive ? 'text-main font-bold' : 'text-subtle'}`;
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            return true;
         }
-        return `${baseClasses} ${isActive ? 'text-brand' : 'text-main'}`;
-    };
+        return false;
+    });
 
-    const user = useAuthStore(state => state.user);
-    const clearAuth = useAuthStore(state => state.clearAuth);
-    async function handleLogout() {
-        console.log("logout clicked")
-        setError('');
-        setIsLoading(true);
+    useEffect(() => {
+        const root = document.documentElement;
+        if (isDark) {
+            root.setAttribute('data-theme', 'dark');
+            localStorage.setItem('theme', 'dark');
+        }
+        else {
+            root.setAttribute('data-theme', 'light');
+            localStorage.setItem('theme', 'light');
+        }
+    }, [isDark])
 
-        try {
-            const response = await authApi.logout();
-            console.log(response)
-        }
-        catch (err) {
-            console.log(err)
-            // setError(err.response.data.message)
-        }
-        finally {
-            clearAuth();
-            setIsLoading(false);
-        }
-    }
 
     return (
-        <>
-            <nav className="flex gap-6 p-4 bg-surface border-b border-outline">
-                <NavLink to="/" className={({ isActive }) => getNavClass(isActive)}>Home</NavLink>
-                <NavLink to="/dashboard" className={({ isActive }) => getNavClass(isActive)}>Dashboard</NavLink>
+        <div className="min-h-screen bg-background">
+            <nav className="fixed bottom-0 md:bottom-auto md:top-0 left-0 right-0 z-50 bg-surface border-t md:border-t-0 md:border-b border-outline px-4 md:px-8 py-2 flex justify-between items-center shadow-sm md:shadow-none">
+                <div className="flex items-center gap-4">
+                    <NavLink
+                        to="/"
+                        className="text-xl font-extrabold text-brand tracking-tight">
+                        <img
+                            src={logoIcon}
+                            alt="Evaluate.AI Logo"
+                            className="w-8 h-8 transform group-hover:scale-105 transition-transform duration-200"
+                        />
+                    </NavLink>
 
-                {
-                    user ? (
-                        <>
-                            <button onClick={handleLogout} disabled={isLoading} className="text-error font-semibold hover:opacity-80">
-                                Logout
-                            </button>
-                            <span className="text-subtle text-sm">Welcome, {user.username}</span>
-                        </>
-                    )
-                        : (
-                            <>
-                                <NavLink to="/login" className={({ isActive }) => getNavClass(isActive)}>Login</NavLink>
-                                <NavLink to="/register" className={({ isActive }) => getNavClass(isActive)}>Register</NavLink>
-                            </>
+                    <button
+                        onClick={() => setIsDark(!isDark)}
+                        className={`w-12 h-6 rounded-full p-1 flex items-center transition-colors duration-300 bg-subtle ${isDark ? '' : ' border border-outline'
+                            }`}
+                        aria-label="Toggle Theme"
+                    >
+                        <div
+                            className={`w-4 h-4 rounded-full shadow-sm transform transition-transform duration-300 bg-main ${isDark ? '  translate-x-6' : 'translate-x-0'
+                                }`}
+                        />
+                    </button>
+                </div>
 
-                        )
-                }
+                <div>
+                    {user ? (
+                        <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
+                            <span className="text-sm font-medium text-main">
+                                Hi, {user.username || "User"}
+                            </span>
 
+                            <div className="w-8 h-8 rounded-full bg-brand text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                                {user.username?.charAt(0).toUpperCase() || "U"}
+                            </div>
+                        </div>
+                    ) : (
+                        <NavLink
+                            to="/login"
+                            className="px-5 py-2 text-sm font-semibold text-white bg-brand rounded-lg hover:opacity-90 transition-opacity">
+                            Login
+                        </NavLink>
+                    )}
+                </div>
             </nav>
-
-            <main className="p-8 max-w-5xl mx-auto">
+            <main className="pb-24 pt-8 md:pt-24 md:pb-8 max-w-5xl mx-auto px-4">
                 <Outlet />
             </main>
-        </>
-    )
+        </div>
+    );
 }

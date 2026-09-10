@@ -1,7 +1,7 @@
 import { authApi } from "@/api/client";
 import { useAuthStore } from "@/store/authStore";
 import { useState } from "react"
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
 
@@ -24,7 +24,7 @@ export default function Register() {
             })
 
             setAuth(response.data.user, response.data.accessToken)
-            navigate("/dashboard")
+            navigate("/")
         }
         catch (err) {
             setError(err.response.data.message)
@@ -65,6 +65,13 @@ export default function Register() {
                     {isLoading ? "Creating User" : "Register"}
                 </button>
             </form>
+
+            <div className="mt-6 text-center text-sm text-subtle">
+                Don't have an account?{' '}
+                <Link to="/login" className="text-brand font-semibold hover:underline transition-all">
+                    Login here
+                </Link>
+            </div>
         </div>
     )
 }
