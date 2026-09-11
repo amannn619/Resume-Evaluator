@@ -9,6 +9,10 @@ export const apiClient = axios.create({
 })
 
 export const authApi = {
+    reload: async () => {
+        const response = await apiClient.get('/auth/me');
+        return response.data;
+    },
     register: async (userData: any) => {
         const response = await apiClient.post('/auth/register', userData);
         return response.data
@@ -27,7 +31,7 @@ export const authApi = {
 export const resumeApi = {
     evaluate: async (formData: FormData) => {
         const response = await apiClient.post('/resume/evaluateResume', formData, {
-            headers: {'Content-Type': 'multipart/form-data'}
+            headers: { 'Content-Type': 'multipart/form-data' }
         });
         return response.data;
     },

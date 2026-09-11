@@ -2,9 +2,12 @@ import { useAuthStore } from "@/store/authStore";
 import { useEffect, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import logoIcon from "../../assets/logo.svg";
+import { authApi } from "@/api/client.js";
 
 export default function AppLayout() {
     const user = useAuthStore((state) => state.user);
+    const setAuth = useAuthStore((state) => state.setAuth);
+    const clearAuth = useAuthStore((state) => state.clearAuth);
     const [isDark, setIsDark] = useState(() => {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
@@ -18,6 +21,19 @@ export default function AppLayout() {
     });
 
     useEffect(() => {
+        const restoreSession = async () => {
+            try {
+                const response = await authApi.reload();
+                setAuth(response.data.user, response.data.accessToken)
+            }
+            catch (err) {
+                clearAuth();
+            }
+        }
+        restoreSession();
+    }, []);
+
+    useEffect(() => {
         const root = document.documentElement;
         if (isDark) {
             root.setAttribute('data-theme', 'dark');
@@ -28,6 +44,11 @@ export default function AppLayout() {
             localStorage.setItem('theme', 'light');
         }
     }, [isDark])
+
+    async function handleLogout() {
+        await authApi.logout()
+        clearAuth()
+    }
 
 
     return (
@@ -43,6 +64,15 @@ export default function AppLayout() {
                             className="w-8 h-8 transform group-hover:scale-105 transition-transform duration-200"
                         />
                     </NavLink>
+
+                    {
+                        user && (
+                            <span className="text-sm font-medium text-main">
+                                {user.username || "User"}
+                            </span>
+                        )
+
+                    }
 
                     <button
                         onClick={() => setIsDark(!isDark)}
@@ -60,26 +90,34 @@ export default function AppLayout() {
                 <div>
                     {user ? (
                         <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-                            <span className="text-sm font-medium text-main">
-                                Hi, {user.username || "User"}
-                            </span>
+                            <button onClick={handleLogout} className="text-xs text-error font-semibold hover:underline">
+                                Logout
+                            </button>
 
                             <div className="w-8 h-8 rounded-full bg-brand text-white flex items-center justify-center font-bold text-sm shadow-sm">
                                 {user.username?.charAt(0).toUpperCase() || "U"}
                             </div>
+
                         </div>
                     ) : (
-                        <NavLink
-                            to="/login"
-                            className="px-5 py-2 text-sm font-semibold text-white bg-brand rounded-lg hover:opacity-90 transition-opacity">
-                            Login
-                        </NavLink>
+                        <div className="flex items-center gap-3">
+                            <NavLink
+                                to="/register"
+                                className="px-4 py-2 font-medium bg-btn-primary-bg text-btn-primary-text rounded-lg hover:opacity-90 transition-opacity">
+                                Register
+                            </NavLink>
+                            <NavLink
+                                to="/login"
+                                className="px-4 py-2 font-medium bg-btn-secondary-bg text-btn-secondary-text border border-outline rounded-lg hover:bg-outline/20 transition-colors">
+                                Login
+                            </NavLink>
+                        </div>
                     )}
                 </div>
-            </nav>
+            </nav >
             <main className="pb-24 pt-8 md:pt-24 md:pb-8 max-w-5xl mx-auto px-4">
                 <Outlet />
             </main>
-        </div>
+        </div >
     );
 }

@@ -59,7 +59,7 @@ export default function Register() {
                         required
                     />
                 </div>
-                <button className="mt-4 bg-brand text-white font-semibold py-2 px-4 rounded-lg hover:opacity-90 disabled:opacity-50"
+                <button className="mt-4 bg-btn-primary-bg text-btn-primary-text font-semibold py-2 px-4 rounded-lg hover:opacity-90 disabled:opacity-50"
                     type="submit"
                     disabled={!username || !password || isLoading}>
                     {isLoading ? "Creating User" : "Register"}

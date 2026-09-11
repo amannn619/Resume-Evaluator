@@ -11,33 +11,51 @@
   --color-subtle: var(--text-subtle);
   --color-inverse: var(--text-inverse);
   --color-outline: var(--border);
+
+  --color-btn-primary-bg: var(--btn-primary-bg);
+  --color-btn-primary-text: var(--btn-primary-text);
+  --color-btn-secondary-bg: var(--btn-secondary-bg);
+  --color-btn-secondary-text: var(--btn-secondary-text);
+  --color-btn-secondary-border: var(--btn-secondary-border);
 }
 
 @layer base {
   :root {
     /* LIGHT MODE */
-    --color-primary: #3b82f6;
-    --color-success: #10b981;
+    --color-primary: #111827;     /* Dark button background */
+    --color-success: #10b981;     
     --color-error: #ef4444;
-    --bg-primary: #fafafa;
-    --bg-secondary: #e5e5e5;
-    --text-main: #171717;
-    --text-subtle: #737373;
-    --text-inverse: #ffffff;
-    --border: #e5e5e5;
+    --bg-primary: #f8f9fa;        /* Soft off-white page background (not pure white) */
+    --bg-secondary: #e9ecef;      /* Slightly more grayish navbar and surfaces */
+    --text-main: #111827;         /* Pitch black headings/text */
+    --text-subtle: #6b7280;       /* Muted gray */
+    --text-inverse: #ffffff;      /* White text for dark elements */
+    --border: #cbd5e1;
+
+    --btn-primary-bg: #1e293b;        /* Slate 800: Rich dark gray */
+    --btn-primary-text: #ffffff;
+    --btn-secondary-bg: #f1f5f9;      /* Slate 100: Soft light grayish accent */
+    --btn-secondary-text: #334155;    /* Slate 700 */
+    --btn-secondary-border: #cbd5e1;
   }
 
   html[data-theme='dark'] {
     /* DARK MODE */
-    --color-primary: #3b82f6;
+    --color-primary: #f9fafb;     /* Light button background in dark mode */
     --color-success: #10b981;
     --color-error: #ef4444;
-    --bg-primary: #09090b;
-    --bg-secondary: #18181b;
-    --text-main: #ffffff;
-    --text-subtle: #a1a1aa;
-    --text-inverse: #171717;
+    --bg-primary: #0a0a0a;        /* Near-black page background */
+    --bg-secondary: #18181b;      /* Dark grayish navbar and surfaces */
+    --text-main: #f9fafb;         /* Crisp white */
+    --text-subtle: #9ca3af;       
+    --text-inverse: #111827;      /* Dark text for light elements */
     --border: #27272a;
+
+    --btn-primary-bg: #cbd5e1;        /* Slate 300: Soft light grayish mid-tone */
+    --btn-primary-text: #0f172a;
+    --btn-secondary-bg: #27272a;      /* Dark gray surface accent */
+    --btn-secondary-text: #f8fafb;
+    --btn-secondary-border: #3f3f46;
   }
 
   /* 2. Standard CSS for the body is perfectly fine and avoids @apply issues */
