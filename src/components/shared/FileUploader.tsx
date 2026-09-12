@@ -2,12 +2,12 @@ import type { ChangeEvent } from "react";
 import { useState } from "react";
 
 interface FileUploaderInputProps {
-    accept: string;
     onFileSelect: (file: File | null) => void
+    accept?: string;
     maxSizeMB?: number;
 }
 
-export default function FileUploader({ accept, onFileSelect, maxSizeMB = 2 }: FileUploaderInputProps) {
+export default function FileUploader({ accept = '.pdf', onFileSelect, maxSizeMB = 1 }: FileUploaderInputProps) {
     const [error, setError] = useState("");
     const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
         setError("");

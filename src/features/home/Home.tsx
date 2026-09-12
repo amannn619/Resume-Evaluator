@@ -62,7 +62,7 @@ export default function Home() {
                     onTextChange={setJobDescription}
                 />
 
-                <FileUploader accept=".pdf" maxSizeMB={1} onFileSelect={setResumeFile} />
+                <FileUploader onFileSelect={setResumeFile} />
 
                 {apiError && (
                     <div className="p-4 bg-error/10 border border-error rounded-lg text-error">
@@ -80,7 +80,7 @@ export default function Home() {
                     disabled={!jobDescription || !resumeFile || isLoading}
                 >
                     {isLoading ? (
-                       'Processing'
+                        'Processing'
                     ) : (
                         'Evaluate Now'
                     )}
