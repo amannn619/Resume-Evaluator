@@ -4,6 +4,7 @@ import FileUploader from "@/components/shared/FileUploader";
 import { resumeApi } from "@/api/client";
 import ScoreCard from "@/components/shared/ScoreCard";
 import SuggestionList from "@/components/shared/SuggestionList";
+import Button from "@/components/ui/Button";
 
 export default function Home() {
     const [jobDescription, setJobDescription] = useState<string>("");
@@ -74,17 +75,16 @@ export default function Home() {
                     </ScoreCard>
                 )}
 
-                <button
+                <Button
                     type="submit"
-                    className="px-6 py-3 mt-2 font-semibold rounded-lg bg-brand text-white transition-all hover:opacity-90 disabled:opacity-50 disabled:cursor-not-allowed"
                     disabled={!jobDescription || !resumeFile || isLoading}
                 >
                     {isLoading ? (
-                        <span className="w-5 h-5 border-2 border-white/30 border-t-white rounded-full animate-spin"></span>
+                       'Processing'
                     ) : (
                         'Evaluate Now'
                     )}
-                </button>
+                </Button>
             </form>
         </div>
     );

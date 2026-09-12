@@ -1,13 +1,16 @@
 import { useAuthStore } from "@/store/authStore";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import logoIcon from "../../assets/logo.svg";
 import { authApi } from "@/api/client.js";
+import Button from "../ui/Button";
 
 export default function AppLayout() {
     const user = useAuthStore((state) => state.user);
     const setAuth = useAuthStore((state) => state.setAuth);
     const clearAuth = useAuthStore((state) => state.clearAuth);
+    const [isMenuOpen, setIsMenuOpen] = useState(false);
+    const menuRef = useRef<HTMLDivElement>(null);
     const [isDark, setIsDark] = useState(() => {
         const savedTheme = localStorage.getItem('theme');
         if (savedTheme) {
@@ -31,6 +34,16 @@ export default function AppLayout() {
             }
         }
         restoreSession();
+    }, []);
+
+    useEffect(() => {
+        function handleClickOutside(event: MouseEvent) {
+            if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+                setIsMenuOpen(false);
+            }
+        }
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
     }, []);
 
     useEffect(() => {
@@ -64,16 +77,9 @@ export default function AppLayout() {
                             className="w-8 h-8 transform group-hover:scale-105 transition-transform duration-200"
                         />
                     </NavLink>
+                </div>
 
-                    {
-                        user && (
-                            <span className="text-sm font-medium text-main">
-                                {user.username || "User"}
-                            </span>
-                        )
-
-                    }
-
+                <div className="flex items-center gap-4 md:gap-6">
                     <button
                         onClick={() => setIsDark(!isDark)}
                         className={`w-12 h-6 rounded-full p-1 flex items-center transition-colors duration-300 bg-subtle ${isDark ? '' : ' border border-outline'
@@ -85,32 +91,56 @@ export default function AppLayout() {
                                 }`}
                         />
                     </button>
-                </div>
-
-                <div>
                     {user ? (
-                        <div className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity">
-                            <button onClick={handleLogout} className="text-xs text-error font-semibold hover:underline">
-                                Logout
-                            </button>
-
-                            <div className="w-8 h-8 rounded-full bg-brand text-white flex items-center justify-center font-bold text-sm shadow-sm">
+                        <div className="flex items-center gap-4 md:gap-6 relative" ref={menuRef}>
+                            <span className="text-sm font-medium text-main hidden sm:block">
+                                {user.username || "User"}
+                            </span>
+                            <Button
+                                onClick={() => setIsMenuOpen(!isMenuOpen)}
+                                size='sm'
+                                className="rounded-full ring-2 ring-transparent hover:ring-outline-focus transition-all"
+                            >
                                 {user.username?.charAt(0).toUpperCase() || "U"}
-                            </div>
+                            </Button>
+                            {isMenuOpen && (
+                                <div className="absolute right-0 bottom-full mb-3 md:bottom-auto md:top-full md:mt-3 w-56 bg-surface border border-outline rounded-xl shadow-lg flex flex-col py-1 animate-in fade-in zoom-in-95 duration-100">
 
+                                    {/* Header */}
+                                    <div className="px-4 py-3 border-b border-outline">
+                                        <p className="text-sm font-medium text-main truncate">{user.username}</p>
+                                    </div>
+
+                                    {/* Links */}
+                                    {/* <div className="py-1">
+                                        <NavLink to="/dashboard" onClick={() => setIsMenuOpen(false)} className="block px-4 py-2 text-sm text-main hover:bg-background hover:text-brand transition-colors">
+                                            Dashboard
+                                        </NavLink>
+                                        <NavLink to="/settings" onClick={() => setIsMenuOpen(false)} className="block px-4 py-2 text-sm text-main hover:bg-background hover:text-brand transition-colors">
+                                            Account Settings
+                                        </NavLink>
+                                    </div> */}
+
+                                    {/* Logout */}
+                                    <div className="border-t border-outline py-1">
+                                        <button
+                                            onClick={handleLogout}
+                                            className="w-full text-left px-4 py-2 text-sm font-medium text-error hover:bg-error/10 transition-colors"
+                                        >
+                                            Logout
+                                        </button>
+                                    </div>
+                                </div>
+                            )}
                         </div>
                     ) : (
                         <div className="flex items-center gap-3">
-                            <NavLink
-                                to="/register"
-                                className="px-4 py-2 font-medium bg-btn-primary-bg text-btn-primary-text rounded-lg hover:opacity-90 transition-opacity">
-                                Register
-                            </NavLink>
-                            <NavLink
-                                to="/login"
-                                className="px-4 py-2 font-medium bg-btn-secondary-bg text-btn-secondary-text border border-outline rounded-lg hover:bg-outline/20 transition-colors">
-                                Login
-                            </NavLink>
+                            <Button size="sm" variant="outline">
+                                <NavLink to="/register">Register</NavLink>
+                            </Button>
+                            <Button size="sm">
+                                <NavLink to="/login">Login</NavLink>
+                            </Button>
                         </div>
                     )}
                 </div>

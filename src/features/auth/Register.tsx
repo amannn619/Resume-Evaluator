@@ -1,4 +1,5 @@
 import { authApi } from "@/api/client";
+import Button from "@/components/ui/Button";
 import { useAuthStore } from "@/store/authStore";
 import { useState } from "react"
 import { Link, useNavigate } from "react-router-dom";
@@ -59,11 +60,10 @@ export default function Register() {
                         required
                     />
                 </div>
-                <button className="mt-4 bg-btn-primary-bg text-btn-primary-text font-semibold py-2 px-4 rounded-lg hover:opacity-90 disabled:opacity-50"
-                    type="submit"
-                    disabled={!username || !password || isLoading}>
+
+                <Button type="submit" disabled={!username || !password || isLoading}>
                     {isLoading ? "Creating User" : "Register"}
-                </button>
+                </Button>
             </form>
 
             <div className="mt-6 text-center text-sm text-subtle">

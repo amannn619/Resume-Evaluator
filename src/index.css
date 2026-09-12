@@ -2,60 +2,63 @@
 
 /* 1. Tell Tailwind v4 to generate utility classes from your CSS variables */
 @theme {
-  --color-brand: var(--color-primary);
-  --color-success: var(--color-success);
-  --color-error: var(--color-error);
   --color-background: var(--bg-primary);
-  --color-surface: var(--bg-secondary);
+  --color-surface: var(--bg-surface);
+  --color-hover: var(--bg-hover);
+  
   --color-main: var(--text-main);
   --color-subtle: var(--text-subtle);
   --color-inverse: var(--text-inverse);
-  --color-outline: var(--border);
 
-  --color-btn-primary-bg: var(--btn-primary-bg);
-  --color-btn-primary-text: var(--btn-primary-text);
-  --color-btn-secondary-bg: var(--btn-secondary-bg);
-  --color-btn-secondary-text: var(--btn-secondary-text);
-  --color-btn-secondary-border: var(--btn-secondary-border);
+  --color-outline: var(--border);
+  --color-outline-focus: var(--border-focus);
+
+  --color-brand: var(--color-primary);
+  --color-success: var(--color-success);
+  --color-error: var(--color-error);
 }
 
 @layer base {
   :root {
     /* LIGHT MODE */
-    --color-primary: #111827;     /* Dark button background */
-    --color-success: #10b981;     
-    --color-error: #ef4444;
-    --bg-primary: #f8f9fa;        /* Soft off-white page background (not pure white) */
-    --bg-secondary: #e9ecef;      /* Slightly more grayish navbar and surfaces */
-    --text-main: #111827;         /* Pitch black headings/text */
-    --text-subtle: #6b7280;       /* Muted gray */
-    --text-inverse: #ffffff;      /* White text for dark elements */
-    --border: #cbd5e1;
+    --bg-primary: #f8f9fa;
+    --bg-surface: #e2e8f0;
+    --bg-hover: #cbd5e1;
 
-    --btn-primary-bg: #1e293b;        /* Slate 800: Rich dark gray */
-    --btn-primary-text: #ffffff;
-    --btn-secondary-bg: #f1f5f9;      /* Slate 100: Soft light grayish accent */
-    --btn-secondary-text: #334155;    /* Slate 700 */
-    --btn-secondary-border: #cbd5e1;
+    /* Text */
+    --text-main: #0f172a;
+    --text-subtle: #64748b;
+    --text-inverse: #ffffff;
+
+    /* Borders */
+    --border: #cbd5e1;
+    --border-focus: #0f172a;
+
+    /* Brand & Feedback */
+    --color-primary: #1e293b;
+    --color-success: #10b981;
+    --color-error: #ef4444;
   }
 
   html[data-theme='dark'] {
     /* DARK MODE */
-    --color-primary: #f9fafb;     /* Light button background in dark mode */
+    --bg-primary: #0a0a0a;
+    --bg-surface: #1e1e24;
+    --bg-hover: #2e2e36;
+
+    /* Text */
+    --text-main: #f8fafb;
+    --text-subtle: #94a3b8;
+    --text-inverse: #0f172a;
+
+    /* Borders */
+    --border: #2e2e36;
+    --border-focus: #f8fafb;
+
+    /* Brand & Feedback */
+    --color-primary: #f8fafb;
     --color-success: #10b981;
     --color-error: #ef4444;
-    --bg-primary: #0a0a0a;        /* Near-black page background */
-    --bg-secondary: #18181b;      /* Dark grayish navbar and surfaces */
-    --text-main: #f9fafb;         /* Crisp white */
-    --text-subtle: #9ca3af;       
-    --text-inverse: #111827;      /* Dark text for light elements */
-    --border: #27272a;
-
-    --btn-primary-bg: #cbd5e1;        /* Slate 300: Soft light grayish mid-tone */
-    --btn-primary-text: #0f172a;
-    --btn-secondary-bg: #27272a;      /* Dark gray surface accent */
-    --btn-secondary-text: #f8fafb;
-    --btn-secondary-border: #3f3f46;
   }
 
   /* 2. Standard CSS for the body is perfectly fine and avoids @apply issues */

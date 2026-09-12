@@ -34,7 +34,7 @@ export default function FileUploader({ accept, onFileSelect, maxSizeMB = 2 }: Fi
                 type="file"
                 accept={accept}
                 onChange={handleFileSelect}
-                className="block w-full text-sm text-subtle file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-brand file:text-white hover:file:opacity-90 cursor-pointer transition-colors" />
+                className="block w-full text-sm file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-brand file:text-inverse hover:file:opacity-90 cursor-pointer transition-colors" />
 
             {error && <p className="text-error mt-2 text-sm">{error}</p>}
         </div>
