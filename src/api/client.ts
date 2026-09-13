@@ -3,7 +3,7 @@ import axios from "axios";
 import toast from "react-hot-toast";
 
 export const apiClient = axios.create({
-    baseURL: import.meta.env.VITE_API_BASE_URL,
+    baseURL: import.meta.env.VITE_API_BASE_URL + '/api',
     withCredentials: true,
     headers: {
         'Content-Type': 'application/json'
@@ -115,10 +115,12 @@ export const resumeApi = {
         return response.data
     },
     get: async (id: number) => {
-        const response = await apiClient.get(`/resume/${id}`, {
-            responseType: 'blob'
-        });
+        const response = await apiClient.get(`/resume/${id}`);
         return response.data
+    },
+    download: async (id: number) => {
+        const response = await apiClient.get(`/resume/${id}/ticket`);
+        return response.data;
     },
     evaluate: async (formData: FormData) => {
         const response = await apiClient.post('/resume/evaluateResume', formData, {

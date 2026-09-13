@@ -53,21 +53,12 @@ export default function Resumes() {
         }
     }
 
-    async function downloadresume(resume: Resume) {
+    async function downloadResume(resume: Resume) {
         try {
-            const response = await resumeApi.get(resume.id);
-            console.log(response)
-            const blobUrl = URL.createObjectURL(response);
-            const link = document.createElement('a');
-            link.href = blobUrl;
-            link.download = `${resume.fileName || 'resume'}.pdf`;
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            URL.revokeObjectURL(blobUrl);
+            const response = await resumeApi.download(resume.id);
+            window.open(import.meta.env.VITE_API_BASE_URL + response.data.url, '_blank');
         }
         catch (err) {
-            toast.error("Failed to download the PDF");
         }
         finally {
 
@@ -79,7 +70,7 @@ export default function Resumes() {
         <>
             {
                 savedResumes.map(resume => {
-                    return <ResumeCard onDownload={downloadresume} key={resume.id} resume={resume}></ResumeCard>
+                    return <ResumeCard onDownload={downloadResume} key={resume.id} resume={resume}></ResumeCard>
                 })
             }
             {
