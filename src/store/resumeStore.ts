@@ -1,8 +1,8 @@
 import { create } from "zustand";
 
-interface Resume {
-    id: string,
-    userId: string,
+export interface Resume {
+    id: number,
+    userId: number,
     fileName: string
     createdAt: string;
 }
@@ -17,6 +17,7 @@ interface ResumeState {
 export const useResumeStore = create<ResumeState>((set) => ({
     savedResumes: [],
     setResumes: (resumes: Resume[]) => {
+        console.log(resumes)
         set(() => ({ savedResumes: [...resumes] }))
     },
     addResume: (resume: Resume) => {

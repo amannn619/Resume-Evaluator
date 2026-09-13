@@ -1,5 +1,6 @@
 import { useAuthStore } from "@/store/authStore";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 export const apiClient = axios.create({
     baseURL: import.meta.env.VITE_API_BASE_URL,
@@ -42,7 +43,15 @@ apiClient.interceptors.response.use(
     },
     async (error) => {
         const originalRequest = error.config;
-        console.log(error.response)
+        if (
+            error.response &&
+            error.response.data instanceof Blob &&
+            error.response.data.type === 'application/json'
+        ) {
+            const text = await error.response.data.text();
+            error.response.data = JSON.parse(text);
+        }
+
         if (error.response.status == 401 && error.response.data.message == "TOKEN_EXPIRED") {
             if (!isRefreshing) {
                 isRefreshing = true;
@@ -70,6 +79,8 @@ apiClient.interceptors.response.use(
                 })
             }
         }
+        let errorMessage = error.response.data.message || "Our servers are experiencing issues. Please try again later.";
+        toast.error(errorMessage);
         return Promise.reject(error)
     }
 )
@@ -99,6 +110,16 @@ export const authApi = {
 }
 
 export const resumeApi = {
+    getAll: async () => {
+        const response = await apiClient.get('/resume');
+        return response.data
+    },
+    get: async (id: number) => {
+        const response = await apiClient.get(`/resume/${id}`, {
+            responseType: 'blob'
+        });
+        return response.data
+    },
     evaluate: async (formData: FormData) => {
         const response = await apiClient.post('/resume/evaluateResume', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
@@ -111,9 +132,5 @@ export const resumeApi = {
         });
         return response.data;
     },
-    getAll: async () => {
-        const response = await apiClient.get('/resume');
-        return response.data
-    }
 }
 

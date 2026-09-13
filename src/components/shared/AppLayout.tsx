@@ -5,6 +5,7 @@ import logoIcon from "../../assets/logo.svg";
 import { authApi } from "@/api/client.js";
 import Button from "../ui/Button";
 import PageLoader from "../ui/PageLoader";
+import { Toaster } from "react-hot-toast";
 
 export default function AppLayout() {
     const user = useAuthStore((state) => state.user);
@@ -75,6 +76,13 @@ export default function AppLayout() {
 
     return (
         <>
+            <Toaster
+                position="top-right"
+                toastOptions={{
+                    duration: 4000,
+                    style: { background: '#333', color: '#fff' }
+                }}
+            />
             {initStatus !== 'done' && (
                 <PageLoader isFading={initStatus === 'fading'} />
             )}
