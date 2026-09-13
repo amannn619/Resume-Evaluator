@@ -1,14 +1,11 @@
+import type Resume from "@/interfaces/Resume";
 import { create } from "zustand";
-
-export interface Resume {
-    id: number,
-    userId: number,
-    fileName: string
-    createdAt: string;
-}
 
 interface ResumeState {
     savedResumes: Resume[],
+    isLoading: boolean,
+
+    setIsLoading: (status: boolean) => void,
     setResumes: (resumes: Resume[]) => void,
     addResume: (resume: Resume) => void,
     removeResume: (resume: Resume) => void,
@@ -16,8 +13,12 @@ interface ResumeState {
 
 export const useResumeStore = create<ResumeState>((set) => ({
     savedResumes: [],
+    isLoading: true,
+
+    setIsLoading: (status: boolean) => {
+        set(() => ({ isLoading: status }))
+    },
     setResumes: (resumes: Resume[]) => {
-        console.log(resumes)
         set(() => ({ savedResumes: [...resumes] }))
     },
     addResume: (resume: Resume) => {

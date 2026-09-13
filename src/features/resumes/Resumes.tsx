@@ -2,35 +2,21 @@ import { resumeApi } from "@/api/client"
 import FileUploader from "@/components/shared/FileUploader";
 import Button from "@/components/ui/Button";
 import ResumeCard from "@/components/ui/ResumeCard";
-import { useResumeStore, type Resume } from "@/store/resumeStore"
-import { useEffect, useState } from "react"
+import type Resume from "@/interfaces/Resume";
+import { useResumeStore } from "@/store/resumeStore"
+import { useState } from "react"
 import { toast } from "react-hot-toast";
 
 export default function Resumes() {
 
-    const { savedResumes, addResume, setResumes, removeResume } = useResumeStore();
+
+    const savedResumes = useResumeStore(state => state.savedResumes);
+    const isResumeLoading = useResumeStore(state => state.isLoading);
+    const addResume = useResumeStore(state => state.addResume);
+    const removeResume = useResumeStore(state => state.removeResume);
 
     const [resumeFile, setResumeFile] = useState<File>(null);
-    const [isPageLoading, setIsPageLoading] = useState(true);
     const [isUploading, setIsUploading] = useState(false);
-
-    useEffect(() => {
-        const getResumes = async () => {
-            try {
-                setIsPageLoading(true);
-                const response = await resumeApi.getAll();
-                setResumes(response.data);
-            }
-            catch (err) {
-                toast.error(err.response?.data?.message || "Failed to fetch resumes.")
-                console.error("Failed to fetch resumes", err);
-            }
-            finally {
-                setIsPageLoading(false);
-            }
-        }
-        getResumes()
-    }, [setResumes])
 
     async function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault();
@@ -58,7 +44,7 @@ export default function Resumes() {
     async function downloadResume(resume: Resume) {
         try {
             const response = await resumeApi.download(resume.id);
-            window.open(import.meta.env.VITE_API_BASE_URL + response.data.url, '_blank');
+            window.open(response.data.url, '_blank');
         }
         catch (err) {
             toast.error(err.response?.data?.message || "Failed to download the resume.");
@@ -78,7 +64,7 @@ export default function Resumes() {
         }
     }
 
-    if (isPageLoading) {
+    if (isResumeLoading) {
         return (
             <div className="w-full max-w-5xl mx-auto p-4">
                 <div className="h-8 bg-surface rounded w-48 mb-6 animate-pulse" />
@@ -134,8 +120,9 @@ export default function Resumes() {
                 </h2>
 
                 {savedResumes.length < 5 ? (
-                    <form onSubmit={handleSubmit} className="flex flex-col gap-6 max-w-xl">
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-6">
                         <FileUploader
+                            currentFile={resumeFile}
                             onFileSelect={setResumeFile}
                         />
                         <div className="flex justify-end">

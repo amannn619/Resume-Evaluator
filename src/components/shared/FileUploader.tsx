@@ -1,14 +1,23 @@
-import type { ChangeEvent } from "react";
+import { useRef, type ChangeEvent, useEffect } from "react";
 import { useState } from "react";
 
 interface FileUploaderInputProps {
-    onFileSelect: (file: File | null) => void
+    onFileSelect: (file: File | null) => void,
+    currentFile?: File | null,
     accept?: string;
     maxSizeMB?: number;
 }
 
-export default function FileUploader({ accept = '.pdf', onFileSelect, maxSizeMB = 1 }: FileUploaderInputProps) {
+export default function FileUploader({ accept = '.pdf', onFileSelect, maxSizeMB = 1, currentFile }: FileUploaderInputProps) {
     const [error, setError] = useState("");
+    const inputRef = useRef<HTMLInputElement>(null);
+
+    useEffect(() => {
+        if (currentFile === null && inputRef.current) {
+            inputRef.current.value = "";
+        }
+    }, [currentFile]);
+
     const handleFileSelect = (e: ChangeEvent<HTMLInputElement>) => {
         setError("");
         const file = e.target.files ? e.target.files[0] : null;
@@ -31,6 +40,7 @@ export default function FileUploader({ accept = '.pdf', onFileSelect, maxSizeMB 
                 Upload Resume
             </label>
             <input
+                ref={inputRef}
                 type="file"
                 accept={accept}
                 onChange={handleFileSelect}

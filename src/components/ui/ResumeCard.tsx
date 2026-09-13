@@ -1,5 +1,4 @@
-import type { Resume } from "@/store/resumeStore";
-
+import type Resume from "@/interfaces/Resume";
 interface ResumeCardProps {
     resume: Resume;
     onDownload?: (resume: Resume) => void;

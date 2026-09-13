@@ -2,13 +2,16 @@ import { useAuthStore } from "@/store/authStore";
 import { useEffect, useRef, useState } from "react";
 import { NavLink, Outlet } from "react-router-dom";
 import logoIcon from "../../assets/logo.svg";
-import { authApi } from "@/api/client.js";
+import { authApi, resumeApi } from "@/api/client.js";
 import Button from "../ui/Button";
 import PageLoader from "../ui/PageLoader";
-import { Toaster } from "react-hot-toast";
+import toast, { Toaster } from "react-hot-toast";
+import { useResumeStore } from "@/store/resumeStore";
 
 export default function AppLayout() {
     const user = useAuthStore((state) => state.user);
+    const setResume = useResumeStore(state => state.setResumes);
+    const setResumeLoading = useResumeStore(state => state.setIsLoading);
     const setAuth = useAuthStore((state) => state.setAuth);
     const clearAuth = useAuthStore((state) => state.clearAuth);
     const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -28,6 +31,7 @@ export default function AppLayout() {
     const [initStatus, setInitStatus] = useState<'checking' | 'fading' | 'done'>('checking');
 
     useEffect(() => {
+        setResumeLoading(true);
         const restoreSession = async () => {
             try {
                 const response = await authApi.reload();
@@ -46,6 +50,31 @@ export default function AppLayout() {
         }
         restoreSession();
     }, []);
+
+    useEffect(() => {
+        if (initStatus !== 'done') return;
+        setIsMenuOpen(false);
+        if (user) {
+            const fetchResumes = async () => {
+                try {
+                    const response = await resumeApi.getAll();
+                    setResume(response.data);
+                } catch (err) {
+                    toast.error(
+                        err.response?.data?.message ||
+                        "Failed to fetch resumes."
+                    );
+                    console.error("Failed to fetch resumes after login", err);
+                } finally {
+                    setResumeLoading(false);
+                }
+            };
+            fetchResumes();
+        } else {
+            setResume([]);
+            setResumeLoading(false);
+        }
+    }, [user, initStatus, setResume, setResumeLoading]);
 
     useEffect(() => {
         function handleClickOutside(event: MouseEvent) {
@@ -129,12 +158,10 @@ export default function AppLayout() {
                                     {isMenuOpen && (
                                         <div className="absolute right-0 bottom-full mb-3 md:bottom-auto md:top-full md:mt-3 w-56 bg-surface border border-outline rounded-xl shadow-lg flex flex-col py-1 animate-in fade-in zoom-in-95 duration-100">
 
-                                            {/* Header */}
                                             <div className="px-4 py-3 border-b border-outline">
                                                 <p className="text-sm font-medium text-main truncate">{user.username}</p>
                                             </div>
 
-                                            {/* Links */}
                                             <div className="py-1">
                                                 <NavLink to="/resumes" onClick={() => setIsMenuOpen(false)} className="block px-4 py-2 text-sm text-main hover:bg-background hover:text-brand transition-colors">
                                                     Resumes
@@ -144,7 +171,6 @@ export default function AppLayout() {
                                             </NavLink> */}
                                             </div>
 
-                                            {/* Logout */}
                                             <div className="border-t border-outline py-1">
                                                 <button
                                                     onClick={handleLogout}

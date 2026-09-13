@@ -114,30 +114,32 @@ export const resumeApi = {
         const response = await apiClient.get('/resume');
         return response.data
     },
+    saveResume: async (formData: FormData) => {
+        const response = await apiClient.post('resume', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
+        return response.data;
+    },
+    download: async (id: number) => {
+        const response = await apiClient.get(`/resume/download/${id}`);
+        return response.data;
+    },
     get: async (id: number) => {
         const response = await apiClient.get(`/resume/${id}`);
         return response.data
-    },
-    download: async (id: number) => {
-        const response = await apiClient.get(`/resume/${id}/ticket`);
-        return response.data;
     },
     delete: async (id: number) => {
         const response = await apiClient.delete(`/resume/${id}`);
         return response.data;
     },
-
-
     evaluate: async (formData: FormData) => {
         const response = await apiClient.post('/resume/evaluateResume', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
         return response.data;
     },
-    saveResume: async (formData: FormData) => {
-        const response = await apiClient.post('resume', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        });
+    evaluateSaved: async (id: number, description: string) => {
+        const response = await apiClient.post(`/resume/evaluateSavedResume/${id}`, { description });
         return response.data;
     },
 }
