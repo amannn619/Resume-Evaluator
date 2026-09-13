@@ -168,7 +168,7 @@ export default function AppLayout() {
                             )}
                         </div>
                     </nav >
-                    <main className="pb-24 pt-8 md:pt-18 md:pb-8 max-w-5xl px-4">
+                    <main className="mx-auto pb-24 pt-8 md:pt-18 md:pb-8 max-w-5xl px-4">
                         <Outlet />
                     </main>
                 </div >

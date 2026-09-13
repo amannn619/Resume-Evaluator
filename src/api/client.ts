@@ -79,8 +79,8 @@ apiClient.interceptors.response.use(
                 })
             }
         }
-        let errorMessage = error.response.data.message || "Our servers are experiencing issues. Please try again later.";
-        toast.error(errorMessage);
+        // let errorMessage = error.response.data.message || "Our servers are experiencing issues. Please try again later.";
+        // toast.error(errorMessage);
         return Promise.reject(error)
     }
 )
@@ -122,6 +122,12 @@ export const resumeApi = {
         const response = await apiClient.get(`/resume/${id}/ticket`);
         return response.data;
     },
+    delete: async (id: number) => {
+        const response = await apiClient.delete(`/resume/${id}`);
+        return response.data;
+    },
+
+
     evaluate: async (formData: FormData) => {
         const response = await apiClient.post('/resume/evaluateResume', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
