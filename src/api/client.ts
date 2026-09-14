@@ -137,15 +137,22 @@ export const resumeApi = {
     delete: async (id: number) => {
         const response = await apiClient.delete(`/resume/${id}`);
         return response.data;
-    },
-    evaluate: async (formData: FormData) => {
-        const response = await apiClient.post('/resume/evaluateResume', formData, {
-            headers: { 'Content-Type': 'multipart/form-data' }
-        });
+    }
+}
+
+export const evaluationApi = {
+    getAll: async () => {
+        const response = await apiClient.get('/evaluation');
         return response.data;
     },
     evaluateSaved: async (id: number, description: string) => {
-        const response = await apiClient.post(`/resume/evaluateSavedResume/${id}`, { description });
+        const response = await apiClient.post(`/evaluation/evaluateSavedResume/${id}`, { description });
+        return response.data;
+    },
+    evaluate: async (formData: FormData) => {
+        const response = await apiClient.post('/evaluation/evaluateResume', formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
         return response.data;
     },
 }

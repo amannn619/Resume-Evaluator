@@ -7,13 +7,20 @@ import Button from "../ui/Button";
 import PageLoader from "../ui/PageLoader";
 import toast, { Toaster } from "react-hot-toast";
 import { useResumeStore } from "@/store/resumeStore";
+import { useDashboardStore } from "@/store/dashboardStore";
 
 export default function AppLayout() {
     const user = useAuthStore((state) => state.user);
-    const setResume = useResumeStore(state => state.setResumes);
-    const setResumeLoading = useResumeStore(state => state.setIsLoading);
     const setAuth = useAuthStore((state) => state.setAuth);
     const clearAuth = useAuthStore((state) => state.clearAuth);
+
+    const setEvaluations = useDashboardStore((state) => state.setEvaluations);
+    const setHasFetched = useDashboardStore((state) => state.setHasFetched);
+
+
+    const setResume = useResumeStore(state => state.setResumes);
+    const setResumeLoading = useResumeStore(state => state.setIsLoading);
+
     const [isMenuOpen, setIsMenuOpen] = useState(false);
     const menuRef = useRef<HTMLDivElement>(null);
     const [isDark, setIsDark] = useState(() => {
@@ -100,6 +107,8 @@ export default function AppLayout() {
 
     async function handleLogout() {
         await authApi.logout();
+        setHasFetched(false);
+        setEvaluations([]);
         clearAuth();
     }
 
@@ -181,20 +190,20 @@ export default function AppLayout() {
                             {user ? (
                                 <div className="flex items-center gap-4 md:gap-6 relative" ref={menuRef}>
                                     <span className="text-sm font-medium text-main hidden sm:block">
-                                        {user.username || "User"}
+                                        {user.userName || "User"}
                                     </span>
                                     <Button
                                         onClick={() => setIsMenuOpen(!isMenuOpen)}
                                         size='sm'
                                         className="rounded-full ring-2 ring-transparent hover:ring-outline-focus transition-all"
                                     >
-                                        {user.username?.charAt(0).toUpperCase() || "U"}
+                                        {user.userName?.charAt(0).toUpperCase() || "U"}
                                     </Button>
                                     {isMenuOpen && (
                                         <div className="absolute right-0 bottom-full mb-3 md:bottom-auto md:top-full md:mt-3 w-56 bg-surface border border-outline rounded-xl shadow-lg flex flex-col py-1 animate-in fade-in zoom-in-95 duration-100">
 
                                             <div className="px-4 py-3 border-b border-outline">
-                                                <p className="text-sm font-medium text-main truncate">{user.username}</p>
+                                                <p className="text-sm font-medium text-main truncate">{user.userName}</p>
                                             </div>
 
                                             {/* <div className="py-1">

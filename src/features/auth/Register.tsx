@@ -9,7 +9,7 @@ export default function Register() {
 
     const [error, setError] = useState('');
     const [isLoading, setIsLoading] = useState(false);
-    const [username, setUsername] = useState('');
+    const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
 
     const navigate = useNavigate()
@@ -20,10 +20,7 @@ export default function Register() {
         setError('');
         setIsLoading(true);
         try {
-            const response = await authApi.register({
-                username: username,
-                password: password
-            })
+            const response = await authApi.register({ userName, password })
 
             setAuth(response.data.user, response.data.accessToken)
             navigate("/")
@@ -49,8 +46,8 @@ export default function Register() {
                     <label className="block text-sm font-bold text-main mb-1">Username</label>
                     <input
                         type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
                         className="w-full p-2 border border-outline rounded-lg bg-background text-main focus:ring-2 focus:ring-brand focus:outline-none"
                         required
                     />
@@ -66,7 +63,7 @@ export default function Register() {
                     />
                 </div>
 
-                <Button type="submit" disabled={!username || !password || isLoading}>
+                <Button type="submit" disabled={!userName || !password || isLoading}>
                     {isLoading ? "Creating User" : "Register"}
                 </Button>
             </form>

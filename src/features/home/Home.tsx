@@ -1,34 +1,29 @@
 import { useEffect, useState } from "react";
 import JobDescriptionInput from "@features/home/JobDescriptionInput";
 import FileUploader from "@/components/shared/FileUploader";
-import { resumeApi } from "@/api/client";
-import ScoreCard from "@/components/shared/ScoreCard";
-import SuggestionList from "@/components/shared/SuggestionList";
+import { evaluationApi } from "@/api/client";
 import Button from "@/components/ui/Button";
 import toast from "react-hot-toast";
 import { useResumeStore } from "@/store/resumeStore";
 import { useAuthStore } from "@/store/authStore";
 import type Resume from "@/interfaces/Resume";
-
-interface EvaluationResponse {
-    score: number;
-    detected_experience: string;
-    strengths: string[];
-    missing_keywords: string[];
-    improvements: string[];
-}
+import Result from "@/components/shared/Result";
+import type AiResponse from "@/interfaces/AiResponse";
+import { useDashboardStore } from "@/store/dashboardStore";
 
 export default function Home() {
     const user = useAuthStore(state => state.user);
     const savedResumes = useResumeStore(state => state.savedResumes);
     const isResumeLoading = useResumeStore(state => state.isLoading);
 
+    const setHasFetched = useDashboardStore(state => state.setHasFetched);
+
     const [jobDescription, setJobDescription] = useState<string>("");
     const [jdError, setJdError] = useState("");
     const [resumeFile, setResumeFile] = useState<File | null>(null);
 
     const [isLoading, setIsLoading] = useState(false);
-    const [apiResponse, setApiResponse] = useState<EvaluationResponse | null>(null);
+    const [apiResponse, setApiResponse] = useState<AiResponse | null>(null);
 
     const [activeTab, setActiveTab] = useState<"upload" | "saved">("upload");
     const [selectedResume, setSelectedResume] = useState<Resume>(null);
@@ -56,14 +51,15 @@ export default function Home() {
         setIsLoading(true);
         try {
             if (activeTab == "saved") {
-                const result = await resumeApi.evaluateSaved(selectedResume.id, jobDescription);
+                const result = await evaluationApi.evaluateSaved(selectedResume.id, jobDescription);
                 setApiResponse(result.data);
+                setHasFetched(false);
             }
             else {
                 const formData = new FormData();
                 formData.append('resume', resumeFile);
                 formData.append('description', jobDescription);
-                const result = await resumeApi.evaluate(formData);
+                const result = await evaluationApi.evaluate(formData);
                 setApiResponse(result.data);
             }
 
@@ -175,36 +171,7 @@ export default function Home() {
             </div>
 
             {apiResponse && (
-                <div className="mt-8 animate-in fade-in slide-in-from-bottom-4 duration-500">
-                    <h2 className="text-xl font-bold text-main mb-4 px-2">
-                        Evaluation Results
-                    </h2>
-                    <ScoreCard
-                        score={apiResponse.score}
-                        experience={apiResponse.detected_experience}
-                    >
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6 border-b border-outline pb-6">
-                            <SuggestionList
-                                title="Key Strengths"
-                                items={apiResponse.strengths}
-                                type="success"
-                            />
-                            <SuggestionList
-                                title="Missing Keywords"
-                                items={apiResponse.missing_keywords}
-                                type="warning"
-                            />
-                        </div>
-
-                        <div className="pt-2">
-                            <SuggestionList
-                                title="Actionable Improvements"
-                                items={apiResponse.improvements}
-                                type="info"
-                            />
-                        </div>
-                    </ScoreCard>
-                </div>
+                <Result aiResponse={apiResponse} />
             )}
 
         </div>

@@ -77,14 +77,14 @@ export default function Modal({
 
             <div
                 className={cn(
-                    "relative w-full bg-surface border border-outline rounded-xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200",
+                    "relative w-full max-h-[90vh] bg-surface border border-outline rounded-xl shadow-2xl flex flex-col overflow-hidden animate-in fade-in zoom-in-95 duration-200",
                     sizeStyles[size],
                     className
                 )}
                 role="dialog"
                 aria-modal="true"
             >
-                <div className="flex items-center justify-between px-5 py-4 border-b border-outline">
+                <div className="flex items-center justify-between px-5 py-4 border-b border-outline shrink-0">
                     <h2 className="text-lg font-semibold text-main">{title}</h2>
                     <button
                         onClick={onClose}
@@ -97,7 +97,7 @@ export default function Modal({
                     </button>
                 </div>
 
-                <div className="p-5">
+                <div className="p-5 overflow-y-auto">
                     {children}
                 </div>
             </div>

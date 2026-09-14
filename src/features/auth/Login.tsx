@@ -6,7 +6,7 @@ import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
-    const [username, setUsername] = useState('');
+    const [userName, setUserName] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
 
@@ -17,7 +17,7 @@ export default function Login() {
         e.preventDefault();
         setIsLoading(true);
         try {
-            const response = await authApi.login({ username, password });
+            const response = await authApi.login({ userName, password });
             setAuth(response.data.user, response.data.accessToken);
             navigate('/')
         }
@@ -42,8 +42,8 @@ export default function Login() {
                     <label className="block text-sm font-bold text-main mb-1">Username</label>
                     <input
                         type="text"
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
+                        value={userName}
+                        onChange={(e) => setUserName(e.target.value)}
                         className="w-full p-2 border border-outline rounded-lg bg-background text-main focus:ring-2 focus:ring-brand focus:outline-none"
                         required
                     />
@@ -59,7 +59,7 @@ export default function Login() {
                     />
                 </div>
 
-                <Button type="submit" disabled={!username || !password || isLoading}>
+                <Button type="submit" disabled={!userName || !password || isLoading}>
                     {isLoading ? "Logging in" : "Login"}
                 </Button>
             </form>
