@@ -2,6 +2,7 @@ import { authApi } from "@/api/client";
 import Button from "@/components/ui/Button";
 import { useAuthStore } from "@/store/authStore";
 import { useState } from "react"
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Register() {
@@ -14,7 +15,7 @@ export default function Register() {
     const navigate = useNavigate()
     const setAuth = useAuthStore((state) => state.setAuth);
 
-    async function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault();
         setError('');
         setIsLoading(true);
@@ -28,7 +29,11 @@ export default function Register() {
             navigate("/")
         }
         catch (err) {
-            setError(err.response.data.message)
+            toast.error(
+                err.response?.data?.message ||
+                "Unable to authenticate"
+            );
+            console.error("Register Error", err);
         }
         finally {
             setIsLoading(false);

@@ -52,7 +52,7 @@ apiClient.interceptors.response.use(
             error.response.data = JSON.parse(text);
         }
 
-        if (error.response.status == 401 && error.response.data.message == "TOKEN_EXPIRED") {
+        if (error.response && error.response.status == 401 && error.response.data.message == "TOKEN_EXPIRED") {
             if (!isRefreshing) {
                 isRefreshing = true;
                 try {
@@ -115,7 +115,7 @@ export const resumeApi = {
         return response.data
     },
     saveResume: async (formData: FormData) => {
-        const response = await apiClient.post('resume', formData, {
+        const response = await apiClient.post('/resume', formData, {
             headers: { 'Content-Type': 'multipart/form-data' }
         });
         return response.data;
@@ -126,6 +126,12 @@ export const resumeApi = {
     },
     get: async (id: number) => {
         const response = await apiClient.get(`/resume/${id}`);
+        return response.data
+    },
+    update: async (id: number, formData: FormData) => {
+        const response = await apiClient.put(`/resume/${id}`, formData, {
+            headers: { 'Content-Type': 'multipart/form-data' }
+        });
         return response.data
     },
     delete: async (id: number) => {

@@ -2,10 +2,10 @@ import { authApi } from "@/api/client";
 import Button from "@/components/ui/Button";
 import { useAuthStore } from "@/store/authStore";
 import { useState } from "react"
+import toast from "react-hot-toast";
 import { Link, useNavigate } from "react-router-dom";
 
 export default function Login() {
-    const [error, setError] = useState('');
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [isLoading, setIsLoading] = useState(false);
@@ -13,9 +13,8 @@ export default function Login() {
     const navigate = useNavigate();
     const setAuth = useAuthStore((state) => state.setAuth);
 
-    async function handleSubmit(e: React.FormEvent) {
+    async function handleSubmit(e: React.SubmitEvent) {
         e.preventDefault();
-        setError("");
         setIsLoading(true);
         try {
             const response = await authApi.login({ username, password });
@@ -23,8 +22,11 @@ export default function Login() {
             navigate('/')
         }
         catch (err) {
-            console.log(err.response)
-            setError(err.response.data.message)
+            toast.error(
+                err.response?.data?.message ||
+                "Unable to authenticate."
+            );
+            console.error("Login Error", err);
         }
         finally {
             setIsLoading(false);
@@ -35,7 +37,6 @@ export default function Login() {
     return (
         <div className="max-w-md mx-auto mt-10 p-6 bg-surface border border-outline rounded-xl shadow-sm">
             <h2 className="text-2xl font-bold text-main mb-6">Login</h2>
-            {error && <div className="mb-4 p-3 bg-error/10 text-error rounded-lg text-sm">{error}</div>}
             <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                 <div>
                     <label className="block text-sm font-bold text-main mb-1">Username</label>

@@ -7,6 +7,7 @@ import Resumes from '@/features/resumes/Resumes';
 import ProtectedRoute from '@/components/shared/ProtectedRoute';
 import GuestRoute from '@/components/shared/GuestRoute';
 import RouteErrorBoundary from '@/components/shared/RouteErrorBoundary';
+import Dashboard from '@/features/dashboard/Dashboard';
 
 export const router = createBrowserRouter([
     {
@@ -37,6 +38,10 @@ export const router = createBrowserRouter([
                     {
                         path: '/resumes',
                         element: <Resumes />
+                    },
+                    {
+                        path: '/dashboard',
+                        element: <Dashboard />
                     }
                 ]
             }

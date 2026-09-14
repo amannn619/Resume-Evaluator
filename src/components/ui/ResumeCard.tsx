@@ -1,12 +1,14 @@
 import type Resume from "@/interfaces/Resume";
+import Tooltip from "@/components/ui/ToolTip"
 interface ResumeCardProps {
     resume: Resume;
     onDownload?: (resume: Resume) => void;
+    onUpdate?: (resume: Resume) => void;
     onDelete?: (resume: Resume) => void;
 }
-export default function ResumeCard({ resume, onDownload, onDelete }: ResumeCardProps) {
+export default function ResumeCard({ resume, onDownload, onUpdate, onDelete }: ResumeCardProps) {
 
-    const formattedDate = new Date(resume.createdAt).toLocaleDateString('en-US', {
+    const formattedDate = new Date(resume.updatedAt).toLocaleDateString('en-US', {
         year: 'numeric',
         month: 'short',
         day: 'numeric'
@@ -23,11 +25,13 @@ export default function ResumeCard({ resume, onDownload, onDelete }: ResumeCardP
                 </div>
 
                 <div className="flex flex-col min-w-0">
-                    <h3 className="text-sm font-semibold text-main truncate">
-                        {resume.fileName}
-                    </h3>
+                    <Tooltip content={resume.fileName}>
+                        <h3 className="text-sm font-semibold text-main truncate cursor-default">
+                            {resume.fileName}
+                        </h3>
+                    </Tooltip>
                     <p className="text-xs text-subtle mt-0.5">
-                        Added on {formattedDate}
+                        Updated on {formattedDate}
                     </p>
                 </div>
             </div>
@@ -41,6 +45,16 @@ export default function ResumeCard({ resume, onDownload, onDelete }: ResumeCardP
                 >
                     <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                    </svg>
+                </button>
+
+                <button
+                    onClick={() => onUpdate?.(resume)}
+                    className="p-2 text-subtle hover:text-brand hover:bg-brand/10 rounded-md transition-colors"
+                    title="Replace Resume"
+                >
+                    <svg className="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
                     </svg>
                 </button>
 

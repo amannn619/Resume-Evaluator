@@ -25,7 +25,7 @@ export default function Home() {
 
     const [jobDescription, setJobDescription] = useState<string>("");
     const [jdError, setJdError] = useState("");
-    const [resumeFile, setResumeFile] = useState<File>(null);
+    const [resumeFile, setResumeFile] = useState<File | null>(null);
 
     const [isLoading, setIsLoading] = useState(false);
     const [apiResponse, setApiResponse] = useState<EvaluationResponse | null>(null);
