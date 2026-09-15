@@ -82,101 +82,136 @@ export default function Home() {
     };
 
     return (
-        <div className="w-full max-w-3xl mx-auto space-y-8">
+        <div className="w-full max-w-6xl mx-auto space-y-12 animate-in fade-in">
 
-            <div className="text-center space-y-2 mb-8">
-                <h1 className="text-3xl font-bold text-main">AI Resume Evaluator</h1>
-                <p className="text-subtle">
-                    Upload your resume and paste a job description to instantly see how well you match.
-                </p>
-            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center mt-4">
+                <div className="space-y-8">
+                    <div>
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-brand/10 text-brand text-xs font-bold uppercase tracking-widest mb-6">
+                            <span className="w-2 h-2 rounded-full bg-brand animate-pulse" />
+                            Smart ATS Optimizer
+                        </div>
+                        <h1 className="text-4xl md:text-5xl font-extrabold text-main leading-tight mb-4">
+                            Beat the ATS.<br />Land the Interview.
+                        </h1>
+                        <p className="text-lg text-subtle max-w-md leading-relaxed">
+                            Stop guessing what recruiters want. Instantly match your resume against any job description to discover missing keywords and critical improvements.
+                        </p>
+                    </div>
 
-            <div className="bg-surface border border-outline rounded-2xl p-6 md:p-8 shadow-sm">
-                <form onSubmit={handleSubmit} className="flex flex-col gap-6">
-
-                    <JobDescriptionInput
-                        value={jobDescription}
-                        error={jdError}
-                        onTextChange={setJobDescription}
-                    />
                     <div className="space-y-4">
-                        <div className="flex border-b border-outline">
-                            <button
-                                type="button"
-                                onClick={() => setActiveTab("upload")}
-                                className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${activeTab === "upload"
-                                    ? "border-brand text-brand"
-                                    : "border-transparent text-subtle hover:text-main"
-                                    }`}
-                            >
-                                Upload New
-                            </button>
-
-                            <button
-                                type="button"
-                                disabled={isResumeLoading || !user}
-                                onClick={() => setActiveTab("saved")}
-                                className={`px-4 py-2 text-sm font-medium border-b-2 flex items-center gap-2 transition-colors ${activeTab === "saved"
-                                    ? "border-brand text-brand"
-                                    : "border-transparent text-subtle hover:text-main disabled:opacity-50 disabled:cursor-not-allowed"
-                                    }`}
-                            >
-                                Choose Saved
-                                {!user && (
-                                    <svg className="w-4 h-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
-                                    </svg>
-                                )}
-                            </button>
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-full bg-surface border border-outline flex items-center justify-center text-brand shrink-0">
+                                1
+                            </div>
+                            <p className="text-sm font-medium text-main">Paste your target job description</p>
                         </div>
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-full bg-surface border border-outline flex items-center justify-center text-brand shrink-0">
+                                2
+                            </div>
+                            <p className="text-sm font-medium text-main">Upload or select a saved resume</p>
+                        </div>
+                        <div className="flex items-center gap-4">
+                            <div className="w-10 h-10 rounded-full bg-surface border border-outline flex items-center justify-center text-brand shrink-0">
+                                3
+                            </div>
+                            <p className="text-sm font-medium text-main">Get a detailed score and actionable feedback</p>
+                        </div>
+                    </div>
+                </div>
 
-                        <div className="pt-2 min-h-[120px]">
-                            {activeTab === "upload" ? (
-                                <FileUploader
-                                    onFileSelect={setResumeFile}
-                                    currentFile={resumeFile}
-                                />
-                            ) : (
-                                <div className="space-y-3 max-h-48 overflow-y-auto pr-2">
-                                    {savedResumes.length === 0 ? (
-                                        <p className="text-sm text-subtle italic text-center py-4">
-                                            You haven't saved any resumes yet.
-                                        </p>
-                                    ) : (
-                                        savedResumes.map((resume) => (
-                                            <button
-                                                key={resume.id}
-                                                type="button"
-                                                onClick={() => setSelectedResume(resume)}
-                                                className={`w-full text-left p-3 rounded-xl border transition-all ${selectedResume?.id === resume.id
-                                                    ? "border-brand bg-brand/5 text-brand"
-                                                    : "border-outline bg-background text-main hover:border-brand/50"
-                                                    }`}
-                                            >
-                                                <div className="text-sm font-semibold truncate">{resume.fileName}</div>
-                                            </button>
-                                        ))
+                <div className="bg-surface border border-outline rounded-2xl p-6 md:p-8 shadow-xl relative overflow-hidden">
+                    <div className="absolute -top-24 -right-24 w-48 h-48 bg-brand/5 rounded-full blur-3xl pointer-events-none" />
+
+                    <form onSubmit={handleSubmit} className="flex flex-col gap-6 relative z-10">
+                        <JobDescriptionInput
+                            value={jobDescription}
+                            error={jdError}
+                            onTextChange={setJobDescription}
+                        />
+                        <div className="space-y-4">
+                            <div className="flex border-b border-outline">
+                                <button
+                                    type="button"
+                                    onClick={() => setActiveTab("upload")}
+                                    className={`px-4 py-2 text-sm font-medium border-b-2 transition-colors ${activeTab === "upload"
+                                        ? "border-brand text-brand"
+                                        : "border-transparent text-subtle hover:text-main"
+                                        }`}
+                                >
+                                    Upload New
+                                </button>
+
+                                <button
+                                    type="button"
+                                    disabled={isResumeLoading || !user}
+                                    onClick={() => setActiveTab("saved")}
+                                    className={`px-4 py-2 text-sm font-medium border-b-2 flex items-center gap-2 transition-colors ${activeTab === "saved"
+                                        ? "border-brand text-brand"
+                                        : "border-transparent text-subtle hover:text-main disabled:opacity-50 disabled:cursor-not-allowed"
+                                        }`}
+                                >
+                                    Choose Saved
+                                    {!user && (
+                                        <svg className="w-4 h-4 text-red-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
+                                        </svg>
                                     )}
-                                </div>
-                            )}
-                        </div>
-                    </div>
+                                </button>
+                            </div>
 
-                    <div className="pt-4 flex justify-end">
-                        <Button
-                            type="submit"
-                            disabled={isLoading || !jobDescription || (activeTab == 'upload' ? !resumeFile : !selectedResume)}
-                        >
-                            {isLoading ? 'Processing Evaluation...' : 'Evaluate Match'}
-                        </Button>
-                    </div>
-                </form>
+                            <div className="pt-2 min-h-[120px]">
+                                {activeTab === "upload" ? (
+                                    <FileUploader
+                                        onFileSelect={setResumeFile}
+                                        currentFile={resumeFile}
+                                    />
+                                ) : (
+                                    <div className="space-y-3 max-h-48 overflow-y-auto pr-2">
+                                        {savedResumes.length === 0 ? (
+                                            <p className="text-sm text-subtle italic text-center py-4">
+                                                You haven't saved any resumes yet.
+                                            </p>
+                                        ) : (
+                                            savedResumes.map((resume) => (
+                                                <button
+                                                    key={resume.id}
+                                                    type="button"
+                                                    onClick={() => setSelectedResume(resume)}
+                                                    className={`w-full text-left p-3 rounded-xl border transition-all ${selectedResume?.id === resume.id
+                                                        ? "border-brand bg-brand/5 text-brand"
+                                                        : "border-outline bg-background text-main hover:border-brand/50"
+                                                        }`}
+                                                >
+                                                    <div className="text-sm font-semibold truncate">{resume.fileName}</div>
+                                                </button>
+                                            ))
+                                        )}
+                                    </div>
+                                )}
+                            </div>
+                        </div>
+
+                        <div className="pt-4 flex justify-end">
+                            <Button
+                                type="submit"
+                                size="lg"
+                                className="w-full md:w-auto"
+                                disabled={isLoading || !jobDescription || (activeTab == 'upload' ? !resumeFile : !selectedResume)}
+                            >
+                                {isLoading ? 'Analyzing match...' : 'Scan Resume'}
+                            </Button>
+                        </div>
+                    </form>
+                </div>
             </div>
 
             {apiResponse && (
-                <Result aiResponse={apiResponse} />
+                <div className="pt-8 border-t border-outline">
+                    <Result aiResponse={apiResponse} />
+                </div>
             )}
-
         </div>
     );
 }
