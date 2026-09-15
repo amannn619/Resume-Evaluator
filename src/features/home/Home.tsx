@@ -26,7 +26,7 @@ export default function Home() {
     const [apiResponse, setApiResponse] = useState<AiResponse | null>(null);
 
     const [activeTab, setActiveTab] = useState<"upload" | "saved">("upload");
-    const [selectedResume, setSelectedResume] = useState<Resume>(null);
+    const [selectedResume, setSelectedResume] = useState<Resume | null>(null);
 
     useEffect(() => {
         if (!user) {
@@ -42,19 +42,23 @@ export default function Home() {
             setJdError("Job description must be at least 50 characters.");
             return;
         }
-        if (activeTab == 'upload' ? !resumeFile : !selectedResume) {
-            alert("Please select a valid resume file.");
-            return;
-        }
 
         setIsLoading(true);
         try {
             if (activeTab == "saved") {
+                if (!selectedResume) {
+                    alert("Please select a valid resume file.");
+                    return;
+                }
                 const result = await evaluationApi.evaluateSaved(selectedResume.id, jobDescription);
                 setApiResponse(result.data);
                 setHasFetched(false);
             }
             else {
+                if (!resumeFile) {
+                    alert("Please select a valid resume file.");
+                    return;
+                }
                 const formData = new FormData();
                 formData.append('resume', resumeFile);
                 formData.append('description', jobDescription);
@@ -64,7 +68,7 @@ export default function Home() {
 
             toast.success("Evaluation complete!");
         }
-        catch (err) {
+        catch (err: any) {
             toast.error(
                 err.response?.data?.message ||
                 "Failed to evaluate resume. Please check your connection and try again."

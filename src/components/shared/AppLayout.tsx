@@ -66,7 +66,7 @@ export default function AppLayout() {
                 try {
                     const response = await resumeApi.getAll();
                     setResume(response.data);
-                } catch (err) {
+                } catch (err: any) {
                     toast.error(
                         err.response?.data?.message ||
                         "Failed to fetch resumes."

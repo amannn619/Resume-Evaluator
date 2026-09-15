@@ -25,7 +25,7 @@ export default function Register() {
             setAuth(response.data.user, response.data.accessToken)
             navigate("/")
         }
-        catch (err) {
+        catch (err: any) {
             toast.error(
                 err.response?.data?.message ||
                 "Unable to authenticate"

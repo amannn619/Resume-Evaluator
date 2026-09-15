@@ -12,16 +12,15 @@
     ],
     "allowArbitraryExtensions": true,
     "skipLibCheck": true,
-    "baseUrl": ".",
     "paths": {
       "@/*": [
-        "src/*"
+        "./src/*"
       ],
       "@features/*": [
-        "src/features/*"
+        "./src/features/*"
       ],
       "@components/*": [
-        "src/components/*"
+        "./src/components/*"
       ]
     },
     /* Bundler mode */

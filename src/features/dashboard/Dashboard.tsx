@@ -27,7 +27,7 @@ export default function Dashboard() {
                     setEvaluations(response.data);
                     setHasFetched(true);
                 }
-                catch (err) {
+                catch (err: any) {
                     toast.error(
                         err.response?.data?.message ||
                         "Failed to fetch Evaluations"

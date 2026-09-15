@@ -32,7 +32,7 @@ export default function Resumes() {
             setResumeFile(null);
             toast.success("Resume uploaded successfully!");
         }
-        catch (err) {
+        catch (err: any) {
             toast.error(err.response?.data?.message || "Failed to upload resume. Please check the file type.");
             console.error("Failed to upload resume", err);
         }
@@ -46,7 +46,7 @@ export default function Resumes() {
             const response = await resumeApi.download(resume.id);
             window.open(response.data.url, '_blank');
         }
-        catch (err) {
+        catch (err: any) {
             toast.error(err.response?.data?.message || "Failed to download the resume.");
             console.error("Failed to download resume", err);
         }
@@ -108,7 +108,7 @@ export default function Resumes() {
             setIsDeleteModalOpen(false);
             setResumeToDelete(null);
         }
-        catch (err) {
+        catch (err: any) {
             toast.error(err.response?.data?.message || "Failed to delete the resume.");
             console.error("Failed to delete resume", err);
         }
