@@ -8,6 +8,8 @@ import type Evaluation from "@/interfaces/Evaluation";
 import { useDashboardStore } from "@/store/dashboardStore"
 import { useEffect, useState } from "react"
 import { toast } from "react-hot-toast";
+import PerformanceChart from "./PerformanceChart.";
+import TopPerformer from "./TopPerformer";
 
 export default function Dashboard() {
     const hasFetched = useDashboardStore(state => state.hasFetched);
@@ -86,15 +88,9 @@ export default function Dashboard() {
             sortable: false
         }
     ];
-
     return (
-        <div className="w-full max-w-5xl mx-auto p-4 space-y-8">
-            <div>
-                <h1 className="text-2xl font-bold text-main">Evaluation History</h1>
-                <p className="text-subtle text-sm mt-1">
-                    Track your past resume scores against various job descriptions.
-                </p>
-            </div>
+        <div className="w-full max-w-5xl mx-auto p-4 space-y-8 animate-in fade-in">
+
 
             {!hasFetched ? (
                 <div className="h-64 bg-surface border border-outline rounded-xl animate-pulse" />
@@ -106,13 +102,17 @@ export default function Dashboard() {
                     </p>
                 </div>
             ) : (
-                <Table
-                    data={evaluations}
-                    columns={columns}
-                    keyExtractor={(row) => row.id}
-                    pagination={true}
-                    pageSize={5}
-                />
+                <>
+                    <PerformanceChart />
+                    <TopPerformer />
+                    <Table
+                        data={evaluations}
+                        columns={columns}
+                        keyExtractor={(row) => row.id}
+                        pagination={true}
+                        pageSize={5}
+                    />
+                </>
             )}
 
             <Modal

@@ -38,7 +38,6 @@ export default function Home() {
         e.preventDefault();
         setJdError("");
         setApiResponse(null);
-
         if (jobDescription.length < 50) {
             setJdError("Job description must be at least 50 characters.");
             return;

@@ -51,7 +51,7 @@ export default function Login() {
                 <div>
                     <label className="block text-sm font-bold text-main mb-1">Password</label>
                     <input
-                        type="text"
+                        type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         className="w-full p-2 border border-outline rounded-lg bg-background text-main focus:ring-2 focus:ring-brand focus:outline-none"
