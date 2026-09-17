@@ -15,6 +15,9 @@ dist
 dist-ssr
 *.local
 
+# Database / Secrets
+.env
+
 # Editor directories and files
 .vscode/*
 !.vscode/extensions.json
@@ -26,6 +29,6 @@ dist-ssr
 *.sln
 *.sw?
 
-# tools
-repomix.config.json
+#tools
 repomix-output.xml
+repomix.config.json
