@@ -9,15 +9,20 @@ export default {
       extend: {
         // 2. Map your custom CSS variables to Tailwind classes
         colors: {
-          brand: 'var(--color-primary)',
-          success: 'var(--color-success)',
-          error: 'var(--color-error)',
           background: 'var(--bg-primary)',
-          surface: 'var(--bg-secondary)',
+          surface: 'var(--bg-surface)',
+          hover: 'var(--bg-hover)',
+
           main: 'var(--text-main)',
           subtle: 'var(--text-subtle)',
           inverse: 'var(--text-inverse)',
+          
           outline: 'var(--border)',
+          'outline-focus': 'var(--border-focus)',
+          
+          brand: 'var(--color-primary)',
+          success: 'var(--color-success)',
+          error: 'var(--color-error)',
         }
       },
     },

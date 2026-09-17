@@ -1,49 +1,97 @@
 @import "tailwindcss";
 
-/* 1. Tell Tailwind v4 to generate utility classes from your CSS variables */
 @theme {
-  --color-brand: var(--color-primary);
-  --color-success: var(--color-success);
-  --color-error: var(--color-error);
   --color-background: var(--bg-primary);
-  --color-surface: var(--bg-secondary);
+  --color-surface: var(--bg-surface);
+  --color-hover: var(--bg-hover);
+  
   --color-main: var(--text-main);
   --color-subtle: var(--text-subtle);
   --color-inverse: var(--text-inverse);
+
   --color-outline: var(--border);
+  --color-outline-focus: var(--border-focus);
+
+  --color-brand: var(--color-primary);
+  --color-success: var(--color-success);
+  --color-error: var(--color-error);
 }
 
 @layer base {
   :root {
     /* LIGHT MODE */
-    --color-primary: #3b82f6;
+    --bg-primary: #f8f9fa;
+    --bg-surface: #e2e8f0;
+    --bg-hover: #cbd5e1;
+
+    /* Text */
+    --text-main: #0f172a;
+    --text-subtle: #64748b;
+    --text-inverse: #ffffff;
+
+    /* Borders */
+    --border: #cbd5e1;
+    --border-focus: #0f172a;
+
+    /* Brand & Feedback */
+    --color-primary: #1e293b;
     --color-success: #10b981;
     --color-error: #ef4444;
-    --bg-primary: #fafafa;
-    --bg-secondary: #e5e5e5;
-    --text-main: #171717;
-    --text-subtle: #737373;
-    --text-inverse: #ffffff;
-    --border: #e5e5e5;
   }
 
   html[data-theme='dark'] {
     /* DARK MODE */
-    --color-primary: #3b82f6;
+    --bg-primary: #0a0a0a;
+    --bg-surface: #1e1e24;
+    --bg-hover: #2e2e36;
+
+    /* Text */
+    --text-main: #f8fafb;
+    --text-subtle: #94a3b8;
+    --text-inverse: #0f172a;
+
+    /* Borders */
+    --border: #2e2e36;
+    --border-focus: #f8fafb;
+
+    /* Brand & Feedback */
+    --color-primary: #f8fafb;
     --color-success: #10b981;
     --color-error: #ef4444;
-    --bg-primary: #09090b;
-    --bg-secondary: #18181b;
-    --text-main: #ffffff;
-    --text-subtle: #a1a1aa;
-    --text-inverse: #171717;
-    --border: #27272a;
   }
 
-  /* 2. Standard CSS for the body is perfectly fine and avoids @apply issues */
   body {
     background-color: var(--bg-primary);
     color: var(--text-main);
     -webkit-font-smoothing: antialiased;
+  }
+
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+
+  *::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  *::-webkit-scrollbar-track {
+    background: transparent;
+  }
+
+  *::-webkit-scrollbar-thumb {
+    background-color: var(--border);
+    border-radius: 9999px;
+    border: 2px solid transparent; 
+    background-clip: padding-box;
+  }
+
+  *::-webkit-scrollbar-thumb:hover {
+    background-color: var(--text-subtle);
+  }
+  
+  *::-webkit-scrollbar-corner {
+    background: transparent;
   }
 }
